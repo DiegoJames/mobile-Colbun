@@ -1,0 +1,32 @@
+page-modal-lista {
+  .button-md{
+    height: 4.5rem;
+  }
+}
+
+
+/*
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title text-center>Id Equipo: {{rutaProvider.listaEquipo.idEquipo}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+ion-list inset>
+  <ion-list-header>
+    Seleccione un tipo de punto a inpeccionar
+  </ion-list-header>
+  <button ion-item
+          *ngFor="let punto of rutaProvider.listaEquipo.listaPuntoInspeccion"
+          (click)="inspeccionar( punto.idPuntoInspeccion )">
+      <h2>{{ punto.tipoPunto }}</h2>
+  <button ion-button clear item-end>Ir</button>
+  </button>
+</ion-list>
+
+
+
+*/

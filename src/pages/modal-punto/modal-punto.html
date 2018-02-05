@@ -1,0 +1,98 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title text-center>Punto de Inspección</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="atras()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item no-lines>
+    <ion-avatar item-start>
+      <img src="assets/img/avatar.png">
+    </ion-avatar>
+    <h2>{{ usuarioProvider.usuario.codigoUsuario }}</h2>
+  </ion-item>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col width-100>
+        <ion-list>
+          <ion-item no-lines>
+            <strong>Tipo Punto: </strong> {{ rutaProvider.puntoInspeccion.tipoPunto }}
+          </ion-item>
+          <div item-content *ngIf="rutaProvider.puntoInspeccion.unidadMedida != ''">
+            <ion-item no-lines>
+              <strong>Unidad Medida: </strong> {{ rutaProvider.puntoInspeccion.unidadMedida }}
+            </ion-item>
+          </div>
+          <div item-content *ngIf="rutaProvider.puntoInspeccion.esSeleccion == '0'">
+            <ion-item no-lines>
+              <strong>Valor Mínimo: </strong> {{ rutaProvider.puntoInspeccion.valorMinimo }}
+            </ion-item>
+            <ion-item no-lines>
+              <strong>Valor Máximo: </strong> {{ rutaProvider.puntoInspeccion.valorMaximo }}
+            </ion-item>
+            <ion-item>
+              <ion-label color="primary" stacked>Valor de medida</ion-label>
+              <ion-input type="number" placeholder="Ingrese un valor" [(ngModel)]="valorMedida"></ion-input>
+            </ion-item>
+          </div>
+          <div item-content *ngIf="rutaProvider.puntoInspeccion.esSeleccion == '1'">
+            <ion-item no-lines>
+              <ion-label>Seleccione valor de medida:</ion-label>
+              <ion-select [(ngModel)]="valorMedida">
+                <ion-option *ngFor="let valorSeleccion of rutaProvider.puntoInspeccion.listaValoresSeleccion" [value]="valorSeleccion.valor">{{ valorSeleccion.valor }}</ion-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <ion-item no-lines>
+            <ion-label>Observación:</ion-label>
+            <ion-textarea placeholder="Agregue una observación..." rows="3" [(ngModel)]="observacion"></ion-textarea>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list>
+
+    <ion-item *ngIf="base64ImageMovil">
+        <img [src]="base64ImageMovil">
+    </ion-item>
+    <ion-item *ngIf="base64ImageMovil">
+      <button ion-button item-right
+         (click)="eliminarFoto()">
+         Eliminar
+      </button>
+  </ion-item>
+
+  </ion-list>
+  <ion-grid>
+        <ion-row>
+            <ion-col>
+                <button ion-button block item-left
+                        (click)="mostrar_camara()">
+                <ion-icon name="camera"></ion-icon>
+                 &nbsp;Cámara
+              </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+  <div padding>
+  <button ion-button
+          block
+          color="secondary"
+          (click)="guardar()"
+          [disabled]=" valorMedida.length == '0' ">
+    Guardar
+  </button>
+  </div>
+
+</ion-content>

@@ -1,0 +1,110 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title text-center>Equipo</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="atras()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+
+      <ion-item no-lines>
+        <ion-avatar item-start>
+          <img src="assets/img/avatar.png">
+        </ion-avatar>
+        <h2>{{ usuarioProvider.usuario.codigoUsuario }}</h2>
+      </ion-item>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col width-100>
+            <ion-list>
+              <ion-item no-lines>
+                <strong>Equipo: </strong>{{ rutaProvider.listaEquipo.nombre }}
+              </ion-item>
+              <div item-content *ngIf="rutaProvider.listaEquipo.referenciaFisica != ''">
+              <ion-item no-lines>
+                <strong>Ref. Física: </strong>{{ rutaProvider.listaEquipo.referenciaFisica }}
+              </ion-item>
+              </div>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col width-100>
+            <ion-list>
+              <ion-item>
+                <ion-label> Notificar:</ion-label>
+                <ion-toggle [(ngModel)]="notificar"></ion-toggle>
+              </ion-item>
+              <ion-item no-lines>
+                  <ion-label>Observación:</ion-label>
+                  <ion-textarea placeholder="Agregue una observación..." rows="3" [(ngModel)]="observacion"></ion-textarea>
+              </ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-list>
+
+          <ion-item *ngIf="base64ImageMovil">
+              <img [src]="base64ImageMovil">
+          </ion-item>
+        <ion-item *ngIf="base64ImageMovil">
+          <button ion-button item-right
+             (click)="eliminarFoto()">
+             Eliminar
+          </button>
+      </ion-item>
+      </ion-list>
+      <ion-grid>
+          <ion-row>
+              <ion-col>
+                  <button ion-button block item-left
+                          (click)="mostrar_camara()">
+                  <ion-icon name="camera"></ion-icon>
+                   &nbsp;Cámara
+                </button>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+
+      <div padding>
+      <button ion-button
+              block
+              color="secondary"
+              (click)="guardar()"
+              [disabled]=" !rutaProvider.color ">
+        Guardar
+      </button>
+      </div>
+
+<hr>
+
+      <h1 text-center>Lista Puntos de Inspección</h1>
+
+    <ion-list inset>
+      <ion-list-header>
+        Seleccione uno para inpeccionar
+      </ion-list-header>
+
+      <button ion-item
+              *ngFor="let punto of rutaProvider.listaEquipo.listaPuntoInspeccion"
+              (click)="inspeccionar( punto.idPuntoInspeccion )"
+              [ngStyle]="styles(punto)">
+
+              <h4 text-wrap>{{ punto.referenciaFisica }}</h4>
+      <button ion-button clear item-end>Ir</button>
+      </button>
+    </ion-list>
+
+
+</ion-content>

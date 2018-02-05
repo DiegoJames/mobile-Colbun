@@ -1,0 +1,54 @@
+<ion-header>
+
+  <ion-navbar hideBackButton>
+    <ion-title text-center>Rutas</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item no-lines>
+    <ion-avatar item-start>
+      <img src="assets/img/avatar.png">
+    </ion-avatar>
+    <h2>{{ usuarioProvider.usuario.codigoUsuario }}</h2>
+  </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-list>
+            <ion-item>
+              <h1 text-center>Seleccione Rutas</h1>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-list *ngFor="let ruta of equipoProvider.listaRuta; let i = index">
+
+       <ion-item *ngIf="!ruta.bloqueado">
+             <ion-label>{{ ruta.nombre }}</ion-label>
+             <ion-checkbox (ionChange)="seleccion_radio(ruta, $event.checked, i)"></ion-checkbox>
+        
+       </ion-item>
+
+
+
+</ion-list>
+
+
+
+
+<div padding>
+<button ion-button
+        block
+        color="secondary"
+        (click)="inicia_ruta()">
+  Cargar Ruta
+</button>
+</div>
+
+</ion-content>

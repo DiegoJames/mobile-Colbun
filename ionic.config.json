@@ -1,0 +1,8 @@
+{
+  "name": "inspeccion",
+  "app_id": "6e90e5c4",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

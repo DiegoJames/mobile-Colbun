@@ -1,0 +1,72 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title text-center>Lista de Equipos</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item no-lines>
+    <ion-avatar item-start>
+      <img src="assets/img/avatar.png">
+    </ion-avatar>
+    <h2>{{ usuarioProvider.usuario.codigoUsuario }}</h2>
+  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <strong>Ruta en Ejecución: </strong> {{ rutaProvider.nombreRuta }}
+          </ion-item>
+          <ion-item class="margen" no-lines *ngFor="let equipo of equipos.listaEquipo; let i = index">
+            <ion-grid>
+            <ion-row>
+              <ion-col col-2 class="right">
+                {{equipo.idEquipo}}
+                </ion-col>
+                <ion-col col-10 text-wrap>
+                  <strong [ngStyle]="styles(equipo)">{{ equipo.nombre }}</strong>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <hr>
+
+<ion-item>
+  <h1 text-center>Listo para Escanear</h1>
+</ion-item>
+  <ion-input style="display:none" id="broadcastData"></ion-input>
+<ion-input type="hidden" [(ngModel)]="fecha" value="{{date  | date: 'yyyy-MM-dd HH:mm:ss'}}"></ion-input>
+<div padding>
+  <button ion-button
+          style="display:none"
+          id="btnScan"
+          (click)="scan()">
+  Iniciar Scan
+</button>
+</div>
+
+<div padding>
+<button ion-button
+        block
+        color="secondary"
+        (click)="cerrar_ruta()"
+        >
+  Finalizar Ruta
+</button>
+</div>
+
+
+
+</ion-content>
