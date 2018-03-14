@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
+
 import { EquipoProvider, DominioProvider, SincronizarProvider } from "../providers/index.providers";
 
 import { UsuarioProvider } from "../providers/usuario/usuario";
@@ -15,7 +16,9 @@ import { RutaProvider } from '../providers/ruta/ruta';
 
 import { Camera } from '@ionic-native/camera';
 
-import { DatePipe } from '@angular/common'
+//import { DatePipe } from '@angular/common'
+
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -39,9 +42,10 @@ import { DatePipe } from '@angular/common'
     RutaProvider,
     EquipoProvider,
     Camera,
-    DatePipe,
+    //DatePipe,
     DominioProvider,
-    SincronizarProvider
+    SincronizarProvider,
+    Network
   ]
 })
 export class AppModule {}

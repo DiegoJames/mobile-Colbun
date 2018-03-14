@@ -6,11 +6,9 @@ export class ValorSeleccionTO{
   constructor(
                 idValorSeleccion:string,
                 valor:string
-
               ){
                 this.idValorSeleccion = idValorSeleccion;
                 this.valor = valor;
-
               }
 
 }

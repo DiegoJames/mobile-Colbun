@@ -1,23 +1,26 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title text-center>Equipo</ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="atras()">
-        <ion-icon name="md-close"></ion-icon>
+    <ion-buttons float-left>
+      <button ion-button icon-only (click)="atras()">
+        <ion-icon name="arrow-back"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-title text-center>Equipo</ion-title>
+
   </ion-toolbar>
 
 </ion-header>
 
 <ion-content padding>
-
+  <ion-item text-right>
+    <ion-label>{{date  | date: 'dd-MM-yyyy HH:mm'}}</ion-label>
+  </ion-item>
       <ion-item no-lines>
         <ion-avatar item-start>
           <img src="assets/img/avatar.png">
         </ion-avatar>
-        <h2>{{ usuarioProvider.usuario.codigoUsuario }}</h2>
+        <h2>{{ equipoProvider.usuario[0].codigoUsuario }}</h2>
       </ion-item>
 
       <ion-grid>
@@ -25,11 +28,14 @@
           <ion-col width-100>
             <ion-list>
               <ion-item no-lines>
-                <strong>Equipo: </strong>{{ rutaProvider.listaEquipo.nombre }}
+                <strong>Ruta en Ejecución: </strong>{{ rutaProvider.nombreRuta }}
               </ion-item>
-              <div item-content *ngIf="rutaProvider.listaEquipo.referenciaFisica != ''">
               <ion-item no-lines>
-                <strong>Ref. Física: </strong>{{ rutaProvider.listaEquipo.referenciaFisica }}
+                <strong>Equipo: </strong>{{ rutaProvider.equipoTO.nombre }}
+              </ion-item>
+              <div item-content *ngIf="rutaProvider.equipoTO.referenciaFisica != ''">
+              <ion-item no-lines>
+                <strong>Ref. Física: </strong>{{ rutaProvider.equipoTO.referenciaFisica }}
               </ion-item>
               </div>
             </ion-list>
@@ -82,7 +88,7 @@
               block
               color="secondary"
               (click)="guardar()"
-              [disabled]=" !rutaProvider.color ">
+              [disabled]=" !rutaProvider.btnHabilitado ">
         Guardar
       </button>
       </div>
@@ -93,11 +99,11 @@
 
     <ion-list inset>
       <ion-list-header>
-        Seleccione uno para inpeccionar
+        Seleccione punto para inpeccionar
       </ion-list-header>
 
       <button ion-item
-              *ngFor="let punto of rutaProvider.listaEquipo.listaPuntoInspeccion"
+              *ngFor="let punto of rutaProvider.equipoTO.listaPuntoInspeccion"
               (click)="inspeccionar( punto.idPuntoInspeccion )"
               [ngStyle]="styles(punto)">
 

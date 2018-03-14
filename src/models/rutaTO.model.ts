@@ -7,22 +7,28 @@ export class RutaTO{
   fechaCierre:string;
   nombre:string;
   idUsuario:string;
-  bloqueado:boolean = false;
-  color:boolean;
+  sincronizado:boolean;
+  cerrado:boolean;
+  descartado:boolean;
   comentarios:string;
   idCentral:string;
-  listaEquipo:EquipoTO[] = [];
+  pendiente:boolean;
+  iniciado:boolean;
+  listaEquipos:EquipoTO[] = [];
 
   constructor(  idRuta:string,
                 idRutaEjecucion:string,
                 fechaCierre:string,
                 nombre:string,
                 idUsuario:string,
-                bloqueado:boolean,
-                color:boolean,
+                sincronizado:boolean,
+                cerrado:boolean,
+                descartado:boolean,
                 comentarios:string,
                 idCentral:string,
-                listaEquipo:EquipoTO[]
+                pendiente:boolean,
+                iniciado:boolean,
+                listaEquipos:EquipoTO[]
 
               ){
                   this.idRuta = idRuta;
@@ -30,11 +36,14 @@ export class RutaTO{
                   this.fechaCierre = fechaCierre;
                   this.nombre = nombre;
                   this.idUsuario = idUsuario;
-                  this.bloqueado = bloqueado;
-                  this.color = color;
+                  this.sincronizado = sincronizado;
+                  this.cerrado = cerrado;
+                  this.descartado = descartado;
                   this.comentarios = comentarios;
                   this.idCentral = idCentral;
-                  this.listaEquipo = listaEquipo;
+                  this.pendiente = pendiente;
+                  this.iniciado = iniciado;
+                  this.listaEquipos = listaEquipos;
                 }
 
 }

@@ -18,7 +18,6 @@ export class SincronizaEquipoTO{
               imagen:string,
               notifica:string,
               listaPuntos:SincronizaPuntoTO[]
-
               ){
                 this.idEquipo = idEquipo;
                 this.nombreEquipo = nombreEquipo;
@@ -27,7 +26,6 @@ export class SincronizaEquipoTO{
                 this.imagen = imagen;
                 this.notifica = notifica;
                 this.listaPuntos = listaPuntos;
-
               }
 
 }

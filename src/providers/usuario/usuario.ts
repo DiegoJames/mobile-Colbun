@@ -3,11 +3,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Rx"
 
-
-//import { Platform } from 'ionic-angular';
 import { URL_SERVICIO_LOGIN, URL_SERVICIO_RUTAS } from "../../config/url.servicios";
-
-import { Storage } from '@ionic/storage';
 
 import 'rxjs/add/operator/map';
 //import 'rxjs/add/operator/timeout';
@@ -24,14 +20,7 @@ export class UsuarioProvider {
 
   dataRuta:any;
 
-  constructor(public http: Http,
-              //public equipoProvider: EquipoProvider
-              //private platform: Platform,
-              //private storage: Storage
-            ) {
-
-          //this.cargar_storage();
-  }
+  constructor(public http: Http) {}
 
   activo():boolean{
     if( this.token ){
@@ -71,22 +60,29 @@ export class UsuarioProvider {
 
      }
 
-  cargar_rutas(){
+  cargar_rutas(idComplejo:string){
+    console.log("COMPLEJO: "+idComplejo);
     return new Promise((resolve, reject) => {
+      console.log("COMPLEJO 1: "+idComplejo);
       let datos = {
                     'idRuta':'0',
                     'estado':'1',
-                    'idComplejo': this.usuario.idComplejo//this.complejo
+                    'idComplejo': idComplejo
                   }
+                  console.log("COMPLEJO 2: "+idComplejo);
       let headers = new Headers({
       'Content-Type': 'application/json'
       });
+      console.log("COMPLEJO 3: "+idComplejo);
       let options = new RequestOptions({
         headers: headers
       });
+      console.log("COMPLEJO 4: "+idComplejo);
     this.http.post( URL_SERVICIO_RUTAS+ "/obtieneListaRuta",JSON.stringify(datos),options )
             .map(res => res.json())
             .catch((err: Response) => {
+
+
                   // The err.statusText is empty if server down (err.type === 3)
                  console.log((err.statusText || "Can't join the server."));
                  // Really usefull. The app can't catch this in "(err)" closure
@@ -96,6 +92,7 @@ export class UsuarioProvider {
                })
                // The (err) => {} param on subscribe can't catch server down error so I keep only the catch
                .subscribe(data => { resolve(data) })
+
            })
   }
 

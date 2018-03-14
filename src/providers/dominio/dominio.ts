@@ -11,8 +11,7 @@ export class DominioProvider {
 
   dominio:any[] = [];
 
-  constructor(  public http: Http) {
-  }
+  constructor(  public http: Http) {}
 
   carga_dominio(){
 

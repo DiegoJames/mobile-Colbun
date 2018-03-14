@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController, LoadingController, AlertController, ModalController } from 'ionic-angular';
+import { IonicPage, ViewController, LoadingController, ModalController, AlertController } from 'ionic-angular';
 
 import { EquipoProvider } from "../../providers/index.providers";
-
-import { UsuarioProvider } from "../../providers/usuario/usuario";
 
 import { RutaProvider } from "../../providers/ruta/ruta";
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
+
+import { PuntoInspeccionTO } from "../../models/puntoInspeccionTO.model";
 
 @IonicPage()
 @Component({
@@ -16,14 +16,15 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 })
 export class ModalListaPage {
 
+  date = new Date();
   base64Image:string;
   base64ImageMovil:string;
   observacion:string;
   notificar:boolean;
 
+
   constructor(
               private viewCtrl: ViewController,
-              public usuarioProvider: UsuarioProvider,
               public rutaProvider: RutaProvider,
               public equipoProvider: EquipoProvider,
               private camera: Camera,
@@ -32,6 +33,7 @@ export class ModalListaPage {
               private modalCtrl: ModalController) {
 
         this.carga_datos_equipos();
+
   }
 
   atras(){
@@ -46,6 +48,7 @@ export class ModalListaPage {
       {
         text: 'Si',
         handler: data => {
+                            this.rutaProvider.borrarScanner(true);
                             this.viewCtrl.dismiss();
                          }
       }
@@ -54,28 +57,16 @@ export class ModalListaPage {
   }
 
   carga_datos_equipos(){
-    for(var idxRuta in this.equipoProvider.rutasCargadas){
-      for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo){
-        if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].idEquipo == this.rutaProvider.listaEquipo.idEquipo){
 
-          this.observacion = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].observacion;
-          if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].notifica == "1"){
-            this.notificar = true;
-          }
-          else{
-            this.notificar = false;
-          }
-          this.base64ImageMovil = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].imagenMovil;
-
-        }
-        for(var idxPunto in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion){
-          if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].color == true){
-            //this.rutaProvider.habilitaBoton(true);
-          }
-        }
-      }
-
+    this.observacion = this.rutaProvider.equipoTO.observacion;
+    if(this.rutaProvider.equipoTO.notifica == "1"){
+      this.notificar = true;
     }
+    else{
+      this.notificar = false;
+    }
+    this.base64ImageMovil = this.rutaProvider.equipoTO.imagenMovil;
+
   }
 
   eliminarFoto(){
@@ -83,10 +74,10 @@ export class ModalListaPage {
     this.base64ImageMovil = null;
   }
 
-  styles(item:any){
+  styles(item:PuntoInspeccionTO){
 
       let styles = {
-        'color': item.color ? 'green' : 'blank'
+        'color': item.guardado ? 'green' : 'blank'
       }
 
     return styles;
@@ -94,16 +85,11 @@ export class ModalListaPage {
   }
 
   inspeccionar( idPunto:string ){
-    let loading = this.loadingCtrl.create({
-      content: "Espere por favor..."
-    });
-    loading.present();
-
     console.log("IDPUNTO: "+idPunto);
 
     this.rutaProvider.cargar_punto_inspeccion( idPunto );
-    loading.dismiss();
-    //this.navCtrl.push("PuntoInspeccionPage");
+
+
     let listaModal = this.modalCtrl.create( "ModalPuntoPage" );
 
     listaModal.present();
@@ -124,7 +110,7 @@ export class ModalListaPage {
 
   mostrar_camara(){
     const options: CameraOptions = {
-      quality: 100,
+      quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -137,8 +123,8 @@ export class ModalListaPage {
      // If it's base64:
      this.base64Image = imageData;
      this.base64ImageMovil = 'data:image/jpeg;base64,' + imageData;
-     console.log("FOTO: ",this.base64Image);
-     console.log("FOTO: "+this.base64Image);
+     console.log("FOTO WS: "+this.base64Image);
+     console.log("FOTO MOBIL: "+this.base64ImageMovil);
     }, (err) => {
      // Handle error
      console.log("ERROR EN CAMARA", JSON.stringify(err));
@@ -147,27 +133,36 @@ export class ModalListaPage {
 
   guardar(){
 
-    for(var idxRuta in this.equipoProvider.rutasCargadas){
-      for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo){
-        if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].idEquipo == this.rutaProvider.listaEquipo.idEquipo){
 
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].observacion = this.observacion;
-          if(this.notificar == true){
-            this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].notifica = "1";
+          this.rutaProvider.equipoTO.observacion = this.observacion;
+
+          if(this.rutaProvider.notificacion && this.notificar){
+            this.rutaProvider.equipoTO.notifica = "1";
           }else{
-            this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].notifica = "0";
+            this.rutaProvider.equipoTO.notifica = "0";
           }
 
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].imagen = this.base64Image;
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].imagenMovil = this.base64ImageMovil;
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].color = true;
+          this.rutaProvider.equipoTO.imagen = this.base64Image;
+          this.rutaProvider.equipoTO.imagenMovil = this.base64ImageMovil;
+          this.rutaProvider.equipoTO.guardado = true;
+          console.log("COLOR: "+this.rutaProvider.equipoTO.guardado);
 
           this.rutaProvider.habilitaBoton(false);
-          console.log("Guardar EQUIPO"+ JSON.stringify(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo]));
+          this.rutaProvider.notifica(false);
 
-        }
-      }
+          for(var idxRuta in this.equipoProvider.rutasCargadas){
+            if(this.equipoProvider.rutasCargadas[idxRuta].idRuta == this.rutaProvider.idRuta){
+              for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipos){
+                if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo].idEquipo == this.rutaProvider.equipoTO.idEquipo){
+                  this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo] = this.rutaProvider.equipoTO;
+                }
+              }
+            }
+
     }
+
+    this.equipoProvider.guardar_storage();
+    this.rutaProvider.borrarScanner(true);
 
     this.viewCtrl.dismiss();
 

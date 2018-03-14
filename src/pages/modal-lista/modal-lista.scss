@@ -7,26 +7,72 @@ page-modal-lista {
 
 /*
 
-<ion-header>
-
-  <ion-navbar>
-    <ion-title text-center>Id Equipo: {{rutaProvider.listaEquipo.idEquipo}}</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-ion-list inset>
-  <ion-list-header>
-    Seleccione un tipo de punto a inpeccionar
-  </ion-list-header>
-  <button ion-item
-          *ngFor="let punto of rutaProvider.listaEquipo.listaPuntoInspeccion"
-          (click)="inspeccionar( punto.idPuntoInspeccion )">
-      <h2>{{ punto.tipoPunto }}</h2>
-  <button ion-button clear item-end>Ir</button>
+<ion-buttons start>
+  <button ion-button (click)="atras()">
+    <ion-icon name="md-close"></ion-icon>
   </button>
-</ion-list>
+</ion-buttons>
 
+carga_datos_equipos(){
+  for(var idxRuta in this.equipoProvider.rutasCargadas){
+    for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo){
+      if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].idEquipo == this.rutaProvider.listaEquipo.idEquipo){
+
+        this.observacion = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].observacion;
+        if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].notifica == "1"){
+          this.notificar = true;
+        }
+        else{
+          this.notificar = false;
+        }
+        this.base64ImageMovil = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].imagenMovil;
+
+      }
+      for(var idxPunto in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion){
+        if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].color == true){
+          //this.rutaProvider.habilitaBoton(true);
+          console.log("COLOR GUARDAR: "+this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].color)
+        }
+      }
+    }
+
+  }
+}
+
+
+
+guardar(){
+
+  for(var idxRuta in this.equipoProvider.rutasCargadas){
+    for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo){
+      if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].idEquipo == this.rutaProvider.listaEquipo.idEquipo){
+
+        this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].observacion = this.observacion;
+
+        if(this.notificar == true){
+          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].notifica = "1";
+        }else{
+          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].notifica = "0";
+        }
+
+        this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].imagen = this.base64Image;
+        this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].imagenMovil = this.base64ImageMovil;
+        this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].color = true;
+        console.log("COLOR: "+this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].color);
+
+        this.rutaProvider.habilitaBoton(false);
+        console.log("Guardar EQUIPO"+ JSON.stringify(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo]));
+
+        //this.equipoProvider.guardar_storage();
+        //this.equipoProvider.cargar_storage();
+
+      }
+    }
+  }
+
+  this.viewCtrl.dismiss();
+
+}
 
 
 */

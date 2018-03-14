@@ -11,11 +11,12 @@ export class PuntoInspeccionTO{
   valorAlerta:string;
   valorMaximo:string;
   valorMinimo:string;
-  color:boolean;
+  guardado:boolean;
   observacion:string;
   imagen:string;
   imagenMovil:string;
   valorMedida:string;
+  valorUltimaLectura:string;
   listaValoresSeleccion:ValorSeleccionTO[] = [];
 
   constructor(
@@ -28,11 +29,12 @@ export class PuntoInspeccionTO{
                 valorAlerta:string,
                 valorMaximo:string,
                 valorMinimo:string,
-                color:boolean,
+                guardado:boolean,
                 observacion:string,
                 imagen:string,
                 imagenMovil:string,
                 valorMedida:string,
+                valorUltimaLectura:string,
                 listaValoresSeleccion:ValorSeleccionTO[]
 
               ){
@@ -46,11 +48,12 @@ export class PuntoInspeccionTO{
                 this.valorAlerta = valorAlerta;
                 this.valorMaximo = valorMaximo;
                 this.valorMinimo = valorMinimo;
-                this.color = color;
+                this.guardado = guardado;
                 this.observacion = observacion;
                 this.imagen = imagen;
                 this.imagenMovil = imagenMovil;
                 this.valorMedida = valorMedida;
+                this.valorUltimaLectura = valorUltimaLectura;
                 this.listaValoresSeleccion = listaValoresSeleccion;
 
               }

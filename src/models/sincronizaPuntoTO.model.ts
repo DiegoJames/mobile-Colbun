@@ -14,7 +14,6 @@ export class SincronizaPuntoTO{
               observaciones:string,
               nombreImagen:string,
               imagen:string
-
               ){
                 this.idPuntoInspeccion = idPuntoInspeccion;
                 this.nombrePunto = nombrePunto;

@@ -10,13 +10,46 @@ page-modal-punto {
 
 
 
-<ion-header>
+guardar(){
 
-  <ion-navbar>
-    <ion-title text-center>Punto de Inspección</ion-title>
-  </ion-navbar>
-
-</ion-header>
+    if(this.rutaProvider.puntoInspeccion.esSeleccion == '0'){
+      if(this.valorMedida != ""){
+        console.log("VALOR distinto vacio");
+        let valorFloat:number = parseFloat(this.valorMedida.replace(',','.'));
+        console.log("VALOR: "+valorFloat);
+        let valorMinimoFloat:number = parseFloat(this.rutaProvider.puntoInspeccion.valorMinimo.replace(',','.'));
+        console.log("VALOR MINIMO: "+valorMinimoFloat);
+        let valorMaximoFloat:number = parseFloat(this.rutaProvider.puntoInspeccion.valorMaximo.replace(',','.'));
+        console.log("VALOR MAXIMO: "+valorMaximoFloat);
+        if(valorMinimoFloat <= valorFloat && valorFloat <= valorMaximoFloat){
+          console.log("IF");
+          this.guardar_punto();
+        }else{
+          console.log("ELSE");
+            this.alertCtrl.create({
+              title: "Advertencia!",
+              subTitle: "El valor ingresado esta fuera de rango",
+              buttons: [
+              {
+                text: 'Cancelar',
+                handler: data =>{}
+              },
+              {
+                text: 'Guardar',
+                handler: data => {
+                                    this.guardar_punto();
+                                  }
+              }
+            ]
+            }).present();
+        }
+      }else{
+        this.guardar_punto();
+      }
+    }else{
+      this.guardar_punto();
+    }
+}
 
 
 */

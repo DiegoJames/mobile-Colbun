@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="ws.colbun.cl" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Sicap</name>
+<widget id="ws.colbun.cl" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Sicap Test</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="diego.orellana@payca.cl" href="http://ionicframework.com/">PAYCA</author>
     <content src="index.html" />
@@ -93,4 +93,8 @@
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>
     <plugin name="cordova-plugin-camera" spec="^3.0.0" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
+    <plugin name="cordova-android-support-gradle-release" spec="file:cordova-android-support-gradle-release">
+        <variable name="ANDROID_SUPPORT_VERSION" value="26.+" />
+    </plugin>
 </widget>

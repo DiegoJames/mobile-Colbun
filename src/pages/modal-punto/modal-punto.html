@@ -1,29 +1,37 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title text-center>Punto de Inspección</ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="atras()">
-        <ion-icon name="md-close"></ion-icon>
+    <ion-buttons float-left>
+      <button ion-button icon-only (click)="atras()">
+        <ion-icon name="arrow-back"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-title text-center>Punto de Inspección</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
 <ion-content padding>
-
+  <ion-item text-right>
+    <ion-label>{{date  | date: 'dd-MM-yyyy HH:mm'}}</ion-label>
+  </ion-item>
   <ion-item no-lines>
     <ion-avatar item-start>
       <img src="assets/img/avatar.png">
     </ion-avatar>
-    <h2>{{ usuarioProvider.usuario.codigoUsuario }}</h2>
+    <h2>{{ equipoProvider.usuario[0].codigoUsuario }}</h2>
   </ion-item>
-  
+
   <ion-grid>
     <ion-row>
       <ion-col width-100>
         <ion-list>
+          <ion-item no-lines>
+            <strong>Equipo: </strong>{{ rutaProvider.equipoTO.nombre }}
+          </ion-item>
+          <ion-item no-lines>
+            <strong>Nombre: </strong>{{ rutaProvider.puntoInspeccion.referenciaFisica }}
+          </ion-item>
           <ion-item no-lines>
             <strong>Tipo Punto: </strong> {{ rutaProvider.puntoInspeccion.tipoPunto }}
           </ion-item>
@@ -32,6 +40,7 @@
               <strong>Unidad Medida: </strong> {{ rutaProvider.puntoInspeccion.unidadMedida }}
             </ion-item>
           </div>
+
           <div item-content *ngIf="rutaProvider.puntoInspeccion.esSeleccion == '0'">
             <ion-item no-lines>
               <strong>Valor Mínimo: </strong> {{ rutaProvider.puntoInspeccion.valorMinimo }}
@@ -39,12 +48,22 @@
             <ion-item no-lines>
               <strong>Valor Máximo: </strong> {{ rutaProvider.puntoInspeccion.valorMaximo }}
             </ion-item>
+            <div item-content *ngIf="rutaProvider.puntoInspeccion.valorUltimaLectura != ''">
+              <ion-item no-lines>
+                <strong>Última Lectura: </strong> {{ rutaProvider.puntoInspeccion.valorUltimaLectura }}
+              </ion-item>
+            </div>
             <ion-item>
               <ion-label color="primary" stacked>Valor de medida</ion-label>
               <ion-input type="number" placeholder="Ingrese un valor" [(ngModel)]="valorMedida"></ion-input>
             </ion-item>
           </div>
           <div item-content *ngIf="rutaProvider.puntoInspeccion.esSeleccion == '1'">
+            <div item-content *ngIf="rutaProvider.puntoInspeccion.valorUltimaLectura != ''">
+              <ion-item no-lines>
+                <strong>Última Lectura: </strong> {{ rutaProvider.puntoInspeccion.valorUltimaLectura }}
+              </ion-item>
+            </div>
             <ion-item no-lines>
               <ion-label>Seleccione valor de medida:</ion-label>
               <ion-select [(ngModel)]="valorMedida">

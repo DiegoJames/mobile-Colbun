@@ -8,7 +8,7 @@ export class EquipoTO{
   notifica:string;
   referenciaFabricante:string;
   referenciaFisica:string;
-  color:boolean;
+  guardado:boolean;
   observacion:string;
   imagen:string;
   imagenMovil:string;
@@ -21,7 +21,7 @@ export class EquipoTO{
                 notifica:string,
                 referenciaFabricante:string,
                 referenciaFisica:string,
-                color:boolean,
+                guardado:boolean,
                 observacion:string,
                 imagen:string,
                 imagenMovil:string,
@@ -34,7 +34,7 @@ export class EquipoTO{
                 this.notifica = notifica;
                 this.referenciaFabricante = referenciaFabricante;
                 this.referenciaFisica = referenciaFisica;
-                this.color = color;
+                this.guardado = guardado;
                 this.observacion = observacion;
                 this.imagen = imagen;
                 this.imagenMovil = imagenMovil;

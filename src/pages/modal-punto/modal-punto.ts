@@ -3,8 +3,6 @@ import { IonicPage, ViewController, AlertController } from 'ionic-angular';
 
 import { EquipoProvider } from "../../providers/index.providers";
 
-import { UsuarioProvider } from "../../providers/usuario/usuario";
-
 import { RutaProvider } from "../../providers/ruta/ruta";
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -16,6 +14,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 })
 export class ModalPuntoPage {
 
+  date = new Date();
   valorMedida:string;
   observacion:string;
   base64Image:string;
@@ -23,15 +22,12 @@ export class ModalPuntoPage {
 
   constructor(
               private alertCtrl: AlertController,
-              public usuarioProvider: UsuarioProvider,
-              public rutaProvider: RutaProvider,
               public equipoProvider: EquipoProvider,
+              public rutaProvider: RutaProvider,
               public camera: Camera,
               private viewCtrl: ViewController) {
 
-                console.log("ModalPuntoPage: "+this.rutaProvider.puntoInspeccion.idPuntoInspeccion);
                 this.mostrar_datos_punto_guardado();
-
   }
 
   atras(){
@@ -54,24 +50,14 @@ export class ModalPuntoPage {
   }
 
   mostrar_datos_punto_guardado(){
-    for(var idxRuta in this.equipoProvider.rutasCargadas){
-      for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo){
-        for(var idxPunto in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion){
 
-          if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].idPuntoInspeccion == this.rutaProvider.puntoInspeccion.idPuntoInspeccion){
-            console.log("idPuntoInspeccion equipo: "+this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].idPuntoInspeccion);
-            console.log("idPuntoInspeccion ruta: "+ this.rutaProvider.puntoInspeccion.idPuntoInspeccion);
+      this.observacion = this.rutaProvider.puntoInspeccion.observacion;
+      this.base64ImageMovil = this.rutaProvider.puntoInspeccion.imagenMovil;
+      this.valorMedida = this.rutaProvider.puntoInspeccion.valorMedida;
 
-              this.observacion = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].observacion;
-              this.base64ImageMovil = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].imagenMovil;
-              this.valorMedida = this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].valorMedida;
 
-              console.log("FIN");
-            }
-          }
-        }
-      }
-  }
+  console.log("FIN");
+}
 
   eliminarFoto(){
     this.base64Image = null;
@@ -80,20 +66,14 @@ export class ModalPuntoPage {
 
   guardar(){
 
-      if(this.rutaProvider.puntoInspeccion.esSeleccion == 0){
+      if(this.rutaProvider.puntoInspeccion.esSeleccion == '0'){
         if(this.valorMedida != ""){
-          console.log("VALOR distinto vacio");
           let valorFloat:number = parseFloat(this.valorMedida.replace(',','.'));
-          console.log("VALOR: "+valorFloat);
           let valorMinimoFloat:number = parseFloat(this.rutaProvider.puntoInspeccion.valorMinimo.replace(',','.'));
-          console.log("VALOR MINIMO: "+valorMinimoFloat);
           let valorMaximoFloat:number = parseFloat(this.rutaProvider.puntoInspeccion.valorMaximo.replace(',','.'));
-          console.log("VALOR MAXIMO: "+valorMaximoFloat);
           if(valorMinimoFloat <= valorFloat && valorFloat <= valorMaximoFloat){
-            console.log("IF");
             this.guardar_punto();
           }else{
-            console.log("ELSE");
               this.alertCtrl.create({
                 title: "Advertencia!",
                 subTitle: "El valor ingresado esta fuera de rango",
@@ -104,7 +84,10 @@ export class ModalPuntoPage {
                 },
                 {
                   text: 'Guardar',
-                  handler: data => { this.guardar_punto(); }
+                  handler: data => {
+                                      this.rutaProvider.notifica(true);
+                                      this.guardar_punto();
+                                    }
                 }
               ]
               }).present();
@@ -118,30 +101,38 @@ export class ModalPuntoPage {
 }
 
 guardar_punto(){
+
   for(var idxRuta in this.equipoProvider.rutasCargadas){
-    for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo){
-      for(var idxPunto in this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion){
-        if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].idPuntoInspeccion == this.rutaProvider.puntoInspeccion.idPuntoInspeccion){
+    if(this.equipoProvider.rutasCargadas[idxRuta].idRuta == this.rutaProvider.idRuta){
+      for(var idxEquipo in this.equipoProvider.rutasCargadas[idxRuta].listaEquipos){
+        if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo].idEquipo == this.rutaProvider.equipoTO.idEquipo){
 
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].observacion = this.observacion;
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].imagen = this.base64Image;
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].imagenMovil = this.base64ImageMovil;
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].valorMedida = this.valorMedida;
-          this.equipoProvider.rutasCargadas[idxRuta].listaEquipo[idxEquipo].listaPuntoInspeccion[idxPunto].color = true;
+          for(var idxPunto in this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo].listaPuntoInspeccion){
+            if(this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo].listaPuntoInspeccion[idxPunto].idPuntoInspeccion == this.rutaProvider.puntoInspeccion.idPuntoInspeccion){
+              this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo].guardado = true;
+              this.rutaProvider.puntoInspeccion.guardado = true;
+              this.rutaProvider.puntoInspeccion.observacion = this.observacion;
+              this.rutaProvider.puntoInspeccion.imagen = this.base64Image;
+              this.rutaProvider.puntoInspeccion.imagenMovil = this.base64ImageMovil;
+              this.rutaProvider.puntoInspeccion.valorMedida = this.valorMedida;
 
-          this.rutaProvider.habilitaBoton(true);
-          console.log("idPuntoInspeccion guardar: "+this.rutaProvider.puntoInspeccion.idPuntoInspeccion);
-          console.log("idPuntoInspeccion guardar: "+this.valorMedida);
+              this.rutaProvider.habilitaBoton(true);
+              this.equipoProvider.rutasCargadas[idxRuta].listaEquipos[idxEquipo].listaPuntoInspeccion[idxPunto] = this.rutaProvider.puntoInspeccion;
+            }
+          }
         }
       }
     }
   }
+
+  this.equipoProvider.guardar_storage();
+
   this.viewCtrl.dismiss();
 }
 
   mostrar_camara(){
     const options: CameraOptions = {
-      quality: 100,
+      quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,

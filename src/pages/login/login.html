@@ -3,13 +3,14 @@
   <ion-navbar hideBackButton>
     <ion-title text-center>Login</ion-title>
   </ion-navbar>
-
-</ion-header>
-
+</ion-header>  
 <ion-content padding text-center>
-
+  <ion-item text-right>
+    <ion-label>{{date  | date: 'dd-MM-yyyy HH:mm'}}</ion-label>
+  </ion-item>
+  <div class="img">
     <img src="assets/img/colbunn.png" width="300" height="100"/>
-
+  </div>  
   <ion-list>
     <ion-item>
       <ion-input placeholder="Nombre de Usuario"
@@ -22,12 +23,12 @@
     </ion-item>
 
   <ion-item>
-    <ion-label>Dominio</ion-label>
 
-    <ion-select [(ngModel)]="dominio">
+    <ion-label>Dominio</ion-label>
+    <ion-select [(ngModel)]="dominio" >
       <ion-option *ngFor="let item of dominioProvider.dominio" [(value)]="item.nombre">{{ item.nombre }}</ion-option>
-      <ion-option class="no-dominios" [(value)]="Colbun" *ngIf="!dominioProvider.dominio || dominioProvider.dominio.length == 0">
-        Colbun
+      <ion-option *ngIf="dominioProvider.dominio.length == '0'" class="no-dominios" [(value)]="dominio">
+        {{ dominio }}
       </ion-option>
     </ion-select>
   </ion-item>
@@ -40,5 +41,6 @@
     Ingresar
   </button>
 </div>
+
 </ion-list>
 </ion-content>
