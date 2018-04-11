@@ -45,7 +45,9 @@ export class SincronizarProvider {
     let datos = {
                   'idEjecucionRuta': ruta.idRutaEjecucion,
                   'comentarios': '',
-                  'fechaCierre': ruta.fechaCierre
+                  'fechaCierre': ruta.fechaCierre,
+                  'idUsuarioEjecucion': ruta.idUsuario,
+                  'tipoSincronizacion': ruta.tipoSincronizacion
                 }
     let headers = new Headers({
     'Content-Type': 'application/json'

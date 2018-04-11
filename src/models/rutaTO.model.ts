@@ -7,6 +7,7 @@ export class RutaTO{
   fechaCierre:string;
   nombre:string;
   idUsuario:string;
+  tipoSincronizacion:string;
   sincronizado:boolean;
   cerrado:boolean;
   descartado:boolean;
@@ -21,6 +22,7 @@ export class RutaTO{
                 fechaCierre:string,
                 nombre:string,
                 idUsuario:string,
+                tipoSincronizacion:string,
                 sincronizado:boolean,
                 cerrado:boolean,
                 descartado:boolean,
@@ -36,6 +38,7 @@ export class RutaTO{
                   this.fechaCierre = fechaCierre;
                   this.nombre = nombre;
                   this.idUsuario = idUsuario;
+                  this.tipoSincronizacion = tipoSincronizacion;
                   this.sincronizado = sincronizado;
                   this.cerrado = cerrado;
                   this.descartado = descartado;

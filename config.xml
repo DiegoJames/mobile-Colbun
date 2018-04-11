@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="ws.colbun.cl" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Sicap Test</name>
+<widget id="ws.colbun.cl" version="1.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Sicap Desa</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="diego.orellana@payca.cl" href="http://ionicframework.com/">PAYCA</author>
     <content src="index.html" />

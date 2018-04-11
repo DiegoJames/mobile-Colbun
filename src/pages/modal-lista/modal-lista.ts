@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController, LoadingController, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, ViewController, ModalController, AlertController } from 'ionic-angular';
 
 import { EquipoProvider } from "../../providers/index.providers";
 
@@ -28,10 +28,9 @@ export class ModalListaPage {
               public rutaProvider: RutaProvider,
               public equipoProvider: EquipoProvider,
               private camera: Camera,
-              private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
               private modalCtrl: ModalController) {
-
+        this.date;
         this.carga_datos_equipos();
 
   }
@@ -123,8 +122,8 @@ export class ModalListaPage {
      // If it's base64:
      this.base64Image = imageData;
      this.base64ImageMovil = 'data:image/jpeg;base64,' + imageData;
+     console.log("FOTO MOVIL: "+this.base64ImageMovil);
      console.log("FOTO WS: "+this.base64Image);
-     console.log("FOTO MOBIL: "+this.base64ImageMovil);
     }, (err) => {
      // Handle error
      console.log("ERROR EN CAMARA", JSON.stringify(err));
@@ -132,8 +131,6 @@ export class ModalListaPage {
   }
 
   guardar(){
-
-
           this.rutaProvider.equipoTO.observacion = this.observacion;
 
           if(this.rutaProvider.notificacion && this.notificar){
@@ -146,6 +143,8 @@ export class ModalListaPage {
           this.rutaProvider.equipoTO.imagenMovil = this.base64ImageMovil;
           this.rutaProvider.equipoTO.guardado = true;
           console.log("COLOR: "+this.rutaProvider.equipoTO.guardado);
+          console.log("IMAGEN: "+this.rutaProvider.equipoTO.imagen);
+          console.log("IMAGEN: "+this.rutaProvider.equipoTO.imagenMovil);
 
           this.rutaProvider.habilitaBoton(false);
           this.rutaProvider.notifica(false);

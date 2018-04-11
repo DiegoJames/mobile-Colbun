@@ -55,16 +55,16 @@
         </div>
       </ion-list>
 
-<div padding>
+<div padding *ngIf="rutaProvider.btnInicia">
 <button ion-button
         block
         color="secondary"
         (click)="carga_equipos()">
-  Iniciar Ruta
+  Iniciar Inspección
 </button>
 </div>
 
-  <div padding>
+  <div padding *ngIf="rutaProvider.btnSincroniza">
   <button ion-button
           block
           color="secondary"
@@ -73,12 +73,11 @@
   </button>
   </div>
 
-  <div padding>
+  <div padding *ngIf="rutaProvider.btnPendiente">
   <button ion-button
           block
           color="secondary"
-          (click)="cerrarRuta()"
-          [disabled]=" !equipoProvider.rutasCargadas[0].pendiente ">
+          (click)="cerrarRuta()">
     Descartar Ruta
   </button>
   </div>

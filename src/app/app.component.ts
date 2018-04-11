@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Platform, App, AlertController } from 'ionic-angular';
+import { Platform, App } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { EquipoProvider } from "../providers/equipo/equipo";
 import { UsuarioProvider } from "../providers/usuario/usuario";
 
 @Component({
@@ -11,22 +12,22 @@ export class MyApp {
   //rootPage:any;
   rootPage:any = "LoginPage";
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
-              public usuarioProvider: UsuarioProvider, public app: App, private alertCtrl: AlertController) {
+              public equipoProvider: EquipoProvider, public usuarioProvider: UsuarioProvider, public app: App) {
     platform.ready().then(() => {
-
-      /*this.usuarioProvider.cargar_storage()
+      //this.equipoProvider.cargar_storage();
+      /*this.equipoProvider.cargar_storage()
       .then( ()=>{
-
-      if(this.usuarioProvider.activo()){
-        this.rootPage = "IniciaRutaPage";
-
+        console.log("ACTIVO: "+this.equipoProvider.idUsuario);
+      if(this.equipoProvider.idUsuario != null){
+        this.rootPage = "ModalIniciaRutaPage";
       }else{
         this.rootPage = "LoginPage";
-      }*/
+      }
 
+    console.log("ACTIVO fuera: "+this.equipoProvider.idUsuario);*/
       statusBar.styleDefault();
       splashScreen.hide();
-
+//});
       platform.registerBackButtonAction(() => {
         let navv = app.getActiveNav();
         if (navv.canGoBack()){ //Can we go back?
@@ -46,8 +47,8 @@ export class MyApp {
           confirms.present();*/
         }
       });
-      });
 
-  //  });
+
+  });
   }
 }

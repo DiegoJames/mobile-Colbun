@@ -22,15 +22,18 @@ export class EquipoProvider {
   public usuario:UsuarioTO[] = [];
   public cantidadEquipo:CantidadEquipoTO;
 
+  //public idUsuario:string = null;
+
   constructor(public storage: Storage,
               private platform: Platform) {
 
 
-          console.log("INICIO CARGA STORAGE: "+JSON.stringify(this.rutasCargadas));
-          if(this.usuario.length>0){
+          console.log("INICIO CARGA STORAGE: "+JSON.stringify(this.rutasCargadas.length));
+          //if(this.usuario.length>0){
               this.cargar_storage();
-          }
+          //}
 
+          //console.log("INICIO ID USUARIO: "+this.idUsuario);
 
   }
 
@@ -69,8 +72,10 @@ export class EquipoProvider {
 
     }
 
-    borrar_storage(key:string){
-     this.storage.set(key, []);
+    borrar_storage(){
+     //this.storage.set(key, []);
+     //this.idUsuario = null;
+     this.guardar_storage();
      //this.cargar_storage();
 
     }
@@ -82,7 +87,9 @@ export class EquipoProvider {
       if( this.platform.is("cordova") ){
         // dispositivo
         this.storage.set("rutasCargadas", this.rutasCargadas);
+        //this.storage.set("idUsuario", this.idUsuario);
         console.log("STORAGE EQUIPO: "+JSON.stringify(this.rutasCargadas.length));
+        //console.log("STORAGE ID USUARIO: "+this.idUsuario);
       }
       });
 
@@ -104,8 +111,18 @@ export class EquipoProvider {
                         if( rutasCargadas ){
                           this.rutasCargadas = rutasCargadas;
                         }
+                        console.log("*CARGAR RUTAS CARGADAS");
                         resolve();
                     });
+              /*this.storage.get("idUsuario")
+                      .then( idUsuario =>{
+                        if( idUsuario ){
+                          this.idUsuario = idUsuario;
+                        }
+                        console.log("*CARGAR ID USUARIO: "+this.idUsuario);
+
+                    });
+                    resolve();*/
               });
         }
       });

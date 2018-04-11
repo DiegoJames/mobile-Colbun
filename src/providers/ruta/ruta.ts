@@ -2,13 +2,11 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Rx"
-import { AlertController, ModalController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 
 import { URL_SERVICIO_RUTAS, URL_SERVICIO_EQUIPOS } from "../../config/url.servicios";
 
 import { EquipoProvider }  from "../index.providers";
-
-import { RutaTO } from "../../models/RutaTO.model";
 
 import { CantidadEquipoTO } from "../../models/cantidadEquipoTO.model";
 
@@ -20,6 +18,10 @@ import { ValorSeleccionTO } from "../../models/valorSeleccionTO.model";
 
 @Injectable()
 export class RutaProvider {
+
+  btnInicia:boolean = false;
+  btnSincroniza:boolean = false;
+  btnPendiente:boolean = false;
 
   idEjecucionRuta:string;
   btnHabilitado:boolean = false;
@@ -42,8 +44,7 @@ export class RutaProvider {
 
   constructor(public http: Http,
               public equipoProvider: EquipoProvider,
-              public alertCtrl: AlertController,
-              private modalCtrl: ModalController) {}
+              public alertCtrl: AlertController) {}
 
   activo():boolean{
     if( this.idRuta ){
@@ -172,6 +173,30 @@ export class RutaProvider {
 
         }
       }
+    }
+
+    botones(){
+      console.log("BOTONES");
+      this.btnInicia = false;
+      this.btnSincroniza = false;
+      this.btnPendiente = false;
+      for(var idxRutaCargada in this.equipoProvider.rutasCargadas){
+        if(this.equipoProvider.rutasCargadas[idxRutaCargada].idRutaEjecucion != null){
+          if(!this.equipoProvider.rutasCargadas[idxRutaCargada].cerrado && !this.equipoProvider.rutasCargadas[idxRutaCargada].descartado){
+            this.btnInicia = true;
+          }
+          if(this.equipoProvider.rutasCargadas[idxRutaCargada].cerrado && !this.equipoProvider.rutasCargadas[idxRutaCargada].sincronizado){
+            this.btnSincroniza = true;
+          }
+          if(this.equipoProvider.rutasCargadas[idxRutaCargada].pendiente && !this.equipoProvider.rutasCargadas[idxRutaCargada].descartado && !this.equipoProvider.rutasCargadas[idxRutaCargada].cerrado){
+            this.btnPendiente = true;
+          }
+
+        }
+      }
+      console.log("btnInicia: "+this.btnInicia);
+      console.log("btnSincroniza "+this.btnSincroniza);
+      console.log("btnPendiente "+this.btnPendiente);
     }
 
 

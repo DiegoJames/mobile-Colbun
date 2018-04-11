@@ -58,7 +58,7 @@ export class ModalListaRutaPage {
               public equipoProvider: EquipoProvider,
               private modalCtrl: ModalController,
               private network: Network) {
-
+                this.date;
                 this.btnSiguiente();
 
               }
@@ -68,7 +68,7 @@ export class ModalListaRutaPage {
     if(this.avanzar){
 
       //this.equipoProvider.guardar_storage(this.equipoProvider.usuario[0].idUsuario);
-
+      this.rutaProvider.botones();
       let listaModal = this.modalCtrl.create( "ModalIniciaRutaPage" );
 
       listaModal.present();
@@ -117,8 +117,14 @@ export class ModalListaRutaPage {
           //this.usuarioProvider.cerrar_sesion();
         //this.platform.exitApp();
         //this.navCtrl.push("LoginPage");
+          this.rutaProvider.botones();
+          //console.log("id Usuario: "+this.equipoProvider.idUsuario);
+          //this.equipoProvider.borrar_storage();
+          //console.log("id Usuario: "+this.equipoProvider.idUsuario);
+          this.elimarRutaNoIniciadas();
           this.navCtrl.push("LoginPage");
-          this.equipoProvider.guardar_storage();
+
+          //this.equipoProvider.guardar_storage();
         }
         //this.navCtrl.popToRoot();
        }
@@ -134,49 +140,69 @@ export class ModalListaRutaPage {
   //}
   }
 
+  elimarRutaNoIniciadas(){
+    let idxRuta = [];
+    for(var idxRutaNoIniciada in this.equipoProvider.rutasCargadas){
+      console.log("idRutaEjecucion?: "+this.equipoProvider.rutasCargadas[idxRutaNoIniciada].idRutaEjecucion);
+      if(this.equipoProvider.rutasCargadas[idxRutaNoIniciada].idRutaEjecucion == null){
+        console.log("BORRO RUTA NO INICIADA: "+this.equipoProvider.rutasCargadas.length);
+        idxRuta.push(idxRutaNoIniciada);
+      }
+    }
+    for(let idxEliminar of idxRuta){
+      delete this.equipoProvider.rutasCargadas[idxEliminar];
+      console.log("ELIMINADAS NO INICIADAS");
+    }
+
+    this.equipoProvider.rutasCargadas = this.equipoProvider.rutasCargadas.filter(Boolean);
+    console.log("FILTER "+this.equipoProvider.rutasCargadas.length);
+    
+    this.equipoProvider.guardar_storage();
+  }
+
   inicia_ruta(){
-if(this.network.type != 'none'){
-    //this.cerrarApp = false;
-    this.cantidadEquipo = 0;
-    this.equiposAgregados = 0;
-    this.iniciaRutaAgregada = 0;
-    this.lstEquipo = 0;
-    this.guardarIdRuta = [];
-    this.rutaSinEquipo = "";
-    console.log("rutaSinEquipo: "+this.rutaSinEquipo);
-    let hayRutaSelec = false;
-    for(var idxRuta in this.equipoProvider.rutasCargadas){
-      if(this.equipoProvider.rutasCargadas[idxRuta].iniciado && this.equipoProvider.rutasCargadas[idxRuta].idRutaEjecucion == null){
-        hayRutaSelec = true;
-        //this.cantSelec++;
-        //console.log("CANTIDAD SELECC: "+this.cantSelec);
+    if(this.network.type != 'none'){
+      //this.cerrarApp = false;
+      this.cantidadEquipo = 0;
+      this.equiposAgregados = 0;
+      this.iniciaRutaAgregada = 0;
+      this.lstEquipo = 0;
+      this.guardarIdRuta = [];
+      this.rutaSinEquipo = "";
+      console.log("rutaSinEquipo: "+this.rutaSinEquipo);
+      let hayRutaSelec = false;
+      for(var idxRuta in this.equipoProvider.rutasCargadas){
+        if(this.equipoProvider.rutasCargadas[idxRuta].iniciado && this.equipoProvider.rutasCargadas[idxRuta].idRutaEjecucion == null){
+          hayRutaSelec = true;
+          //this.cantSelec++;
+          //console.log("CANTIDAD SELECC: "+this.cantSelec);
+        }
       }
-    }
-    if(hayRutaSelec){
+      if(hayRutaSelec){
 
-      this.obtieneCatalogoEquipo();
-      console.log( "LISTA DEL WS: "+ JSON.stringify(this.equipoProvider.rutasCargadas));
-      console.log("FIN LISTA RUTA");
+        this.obtieneCatalogoEquipo();
+        console.log( "LISTA DEL WS: "+ JSON.stringify(this.equipoProvider.rutasCargadas));
+        console.log("FIN LISTA RUTA");
 
+        }else{
+          this.alertCtrl.create({
+            title: "Advertencia!",
+            subTitle: "Seleccione rutas",
+            buttons: ["Ok"]
+          }).present();
+
+        }
       }else{
-        this.alertCtrl.create({
-          title: "Advertencia!",
-          subTitle: "Seleccione rutas",
-          buttons: ["Ok"]
-        }).present();
-
+          // dispositivo sin internet
+          console.log("stuff if disconnected");
+          //this.loading.dismiss();
+          this.alertCtrl.create({
+            title: "Error!",
+            subTitle: "Revise su conexión a internet, y reintente nuevamente.",
+            buttons: ["Ok"]
+          }).present();
+          return;
       }
-    }else{
-        // dispositivo sin internet
-        console.log("stuff if disconnected");
-        //this.loading.dismiss();
-        this.alertCtrl.create({
-          title: "Error!",
-          subTitle: "Revise su conexión a internet, y reintente nuevamente.",
-          buttons: ["Ok"]
-        }).present();
-        return;
-    }
 }
 
 
@@ -185,19 +211,19 @@ obtieneIniciaRuta(){
 
   //  console.log("WS-RUTA: "+JSON.stringify(to.idRuta));
     console.log("ID USUARIO: "+this.equipoProvider.usuario[0].idUsuario);
-for(let idRuta of this.guardarIdRuta){
-  this.rutaProvider.iniciar_ruta(idRuta, this.equipoProvider.usuario[0].idUsuario)
-  .then(
-    (res) => {
+  for(let idRuta of this.guardarIdRuta){
+    this.rutaProvider.iniciar_ruta(idRuta, this.equipoProvider.usuario[0].idUsuario)
+    .then(
+      (res) => {
               this.iniciaRutaAgregada++;
             //this.loading.dismiss();
               console.log('success rutaEjecucion'+ JSON.stringify(res));
               this.dataRuta = res;
               //this.rutaProvider.ejecucionRuta(this.dataRuta);
               console.log('EJECUCION: '+ this.dataRuta.idEjecucionRuta);
-              console.log('ID USUARIO: '+ this.equipoProvider.usuario[0].idUsuario);
+              //console.log('ID USUARIO: '+ this.equipoProvider.usuario[0].idUsuario);
               this.equipoProvider.agrega_rutaToLista(idRuta, this.dataRuta.idEjecucionRuta, this.equipoProvider.usuario[0].idUsuario);
-              this.equipoProvider.guardar_storage();
+              //this.equipoProvider.guardar_storage();
               console.log("iniciaRutaAgregada: "+this.iniciaRutaAgregada);
               console.log("equiposAgregados: "+this.equiposAgregados);
 
@@ -213,6 +239,9 @@ for(let idRuta of this.guardarIdRuta){
                       {
                         text: 'OK',
                         handler: data =>{
+                            this.rutaProvider.botones();
+                            //this.equipoProvider.idUsuario = this.equipoProvider.usuario[0].idUsuario;
+                            this.equipoProvider.guardar_storage();
                             this.loading.dismiss();
                             let listaModal = this.modalCtrl.create( "ModalIniciaRutaPage" );
                             listaModal.present();
@@ -222,6 +251,9 @@ for(let idRuta of this.guardarIdRuta){
                     }).present();
                   }else{
                     console.log("ELSE: "+this.cantidadEquipo);
+                    this.rutaProvider.botones();
+                    //this.equipoProvider.idUsuario = this.equipoProvider.usuario[0].idUsuario;
+                    this.equipoProvider.guardar_storage();
                     this.loading.dismiss();
                     let listaModal = this.modalCtrl.create( "ModalIniciaRutaPage" );
                     listaModal.present();
@@ -268,13 +300,14 @@ obtieneCatalogoEquipo(){
   /*let cantidadEquipo:number = 0;
   let rutaSinEquipo:string = "";
   let lstEquipo:number = 0;*/
+  let errorEquipo:number = 0;
   this.loading = this.loadingCtrl.create({
     content: "Cargando Rutas..."
   });
   this.loading.present();
   for (let to of this.equipoProvider.rutasCargadas){
-    console.log("WS-EQUIPO: "+JSON.stringify(to.idRuta));
     if(to.idRutaEjecucion == null && to.iniciado){
+      console.log("WS-EQUIPO: "+JSON.stringify(to.idRuta));
       this.cargaCatalogo++;
     this.rutaProvider.cargar_equipos(to.idRuta).then(
       (res) => {
@@ -283,10 +316,31 @@ obtieneCatalogoEquipo(){
                   console.log("ID-EQUIPO: "+JSON.stringify(to.idRuta));
                   this.dataEquipo = res;
                   console.log("REST: "+JSON.stringify(res));
-                  //this.rutaProvider.catalogoEquipo(this.dataEquipo);
 
-                  //console.log( "ENTRO REST EQUIPOS---"+id);
+                 if(this.dataEquipo.status.codigo != 0){
+                 errorEquipo++;
+                 console.log("cargaCatalogo: "+JSON.stringify(this.cargaCatalogo));
+                 console.log("errorEquipo: "+JSON.stringify(errorEquipo));
+                 if(errorEquipo == this.cargaCatalogo){
+                   this.cargaCatalogo = 0;
+                   errorEquipo = 0;
+                   console.log("estatus: "+JSON.stringify(this.dataEquipo.status.codigo));
+                   let error = this.dataEquipo.status.mensaje;
 
+                      this.loading.dismiss();
+                      this.alertCtrl.create({
+                        title: "Error!",
+                        subTitle: ""+error,
+                        buttons: [
+                        {
+                          text: 'Ok',
+                          handler: data =>{}
+                        }
+                      ]
+                    }).present();
+                  }
+                    //this.rutaProvider.catalogoEquipo(this.dataEquipo);
+                  }else{
                   let listaEquipos:EquipoTO[] = [];
                   for(let to of this.dataEquipo.listaEquipos){
 
@@ -296,35 +350,35 @@ obtieneCatalogoEquipo(){
                       let listaValor:ValorSeleccionTO[] = [];
                       if(toPunto.listaValoresSeleccion != null){
                         for(let toValor of toPunto.listaValoresSeleccion){
-                            let valorTO = new ValorSeleccionTO(
-                              toValor.idValorSeleccion,
-                              toValor.valor
-                            )
-                            listaValor.push(valorTO);
-                          }
+                          let valorTO = new ValorSeleccionTO(
+                            toValor.idValorSeleccion,
+                            toValor.valor
+                          )
+                          listaValor.push(valorTO);
+                        }
                       }else{
                         let valorTO = null;
                         listaValor.push(valorTO);
                       }
 
-                        let puntoTO = new PuntoInspeccionTO(
-                          toPunto.esSeleccion,
-                          toPunto.idPuntoInspeccion,
-                          toPunto.idTipoPunto,
-                          toPunto.referenciaFisica,
-                          toPunto.tipoPunto,
-                          toPunto.unidadMedida,
-                          toPunto.valorAlerta,
-                          toPunto.valorMaximo,
-                          toPunto.valorMinimo,
-                          false,
-                          '',
-                          '',
-                          '',
-                          '',
-                          toPunto.valorUltimaLectura,
-                          listaValor
-                        )
+                      let puntoTO = new PuntoInspeccionTO(
+                        toPunto.esSeleccion,
+                        toPunto.idPuntoInspeccion,
+                        toPunto.idTipoPunto,
+                        toPunto.referenciaFisica,
+                        toPunto.tipoPunto,
+                        toPunto.unidadMedida,
+                        toPunto.valorAlerta,
+                        toPunto.valorMaximo,
+                        toPunto.valorMinimo,
+                        false,
+                        '',
+                        '',
+                        '',
+                        '',
+                        toPunto.valorUltimaLectura,
+                        listaValor
+                      )
 
                       listaPunto.push(puntoTO);
 
@@ -345,43 +399,45 @@ obtieneCatalogoEquipo(){
                     )
 
                     listaEquipos.push(equipoTO);
+                  }
+                  //this.equipoProvider.agrega_equipoToLista(to.idRuta, listaEquipos);
+                  this.equiposAgregados++;
+                  if(listaEquipos.length > 0){
+                    this.lstEquipo++;
+                    //console.log("listaEquipos.length: "+listaEquipos.length);
+                    console.log("lstEquipo: "+JSON.stringify(this.lstEquipo));
+                    console.log("equiposAgregados: "+JSON.stringify(this.equiposAgregados));
+                    console.log("cargaCatalogo: "+JSON.stringify(this.cargaCatalogo));
+
+                    this.equipoProvider.agrega_equipoToLista(to.idRuta, listaEquipos);
+
+                    this.guardarIdRuta.push(to.idRuta);
+
+                    if(this.cargaCatalogo == this.equiposAgregados){
+                      console.log("IF EQUIPO");
+                      this.cargaCatalogo = 0;
+                      this.obtieneIniciaRuta();
                     }
-                    //this.equipoProvider.agrega_equipoToLista(to.idRuta, listaEquipos);
-                    this.equiposAgregados++;
-                    if(listaEquipos.length > 0){
-                      this.lstEquipo++;
-                      //console.log("listaEquipos.length: "+listaEquipos.length);
-                      console.log("lstEquipo: "+JSON.stringify(this.lstEquipo));
-                      console.log("equiposAgregados: "+JSON.stringify(this.equiposAgregados));
-                      console.log("cargaCatalogo: "+JSON.stringify(this.cargaCatalogo));
+                  }else{
+                    for(var idxCargadas in this.equipoProvider.rutasCargadas){
+                      if(this.equipoProvider.rutasCargadas[idxCargadas].idRuta == to.idRuta){
+                        this.rutaSinEquipo += this.equipoProvider.rutasCargadas[idxCargadas].nombre+" - ";
 
-                      this.equipoProvider.agrega_equipoToLista(to.idRuta, listaEquipos);
+                        this.cantidadEquipo++;
 
-                      this.guardarIdRuta.push(to.idRuta);
-
-                      if(this.cargaCatalogo == this.equiposAgregados){
-                        console.log("IF EQUIPO");
-                        this.cargaCatalogo = 0;
-                        this.obtieneIniciaRuta();
+                        console.log("LENGTH: "+this.equipoProvider.rutasCargadas.length);
+                        //this.guardarIdRuta.push(to.idRuta);
                       }
-                    }else{
-                      for(var idxCargadas in this.equipoProvider.rutasCargadas){
-                        if(this.equipoProvider.rutasCargadas[idxCargadas].idRuta == to.idRuta){
-                          this.rutaSinEquipo += this.equipoProvider.rutasCargadas[idxCargadas].nombre+" - ";
-
-                          this.cantidadEquipo++;
-
-                          console.log("LENGTH: "+this.equipoProvider.rutasCargadas.length);
-                          //this.guardarIdRuta.push(to.idRuta);
-                        }
-                      }
-                      if(this.cargaCatalogo == this.equiposAgregados){
-                        console.log("IF ELSE EQUIPO");
-                        this.cargaCatalogo = 0;
-                        this.obtieneIniciaRuta();
-                      }
-
                     }
+                    if(this.cargaCatalogo == this.equiposAgregados){
+                      console.log("IF ELSE EQUIPO");
+                      this.cargaCatalogo = 0;
+                      this.obtieneIniciaRuta();
+                    }
+                  }
+
+                    //console.log( "ENTRO REST EQUIPOS---"+id);
+                 }
 
 
                 },

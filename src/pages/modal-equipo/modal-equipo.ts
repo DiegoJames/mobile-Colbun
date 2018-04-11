@@ -36,6 +36,7 @@ export class ModalEquipoPage {
 }*/
 
   atras(){
+    //this.rutaProvider.botones();
       this.viewCtrl.dismiss();
   }
 
@@ -103,7 +104,7 @@ cerrar_ruta(){
             this.equipoProvider.rutasCargadas[idxRuta].cerrado = true;
             console.log("Fecha: "+this.equipoProvider.rutasCargadas[idxRuta].fechaCierre);
             console.log("idRutaEjecucion: "+this.equipoProvider.rutasCargadas[idxRuta].idRutaEjecucion);
-
+            this.rutaProvider.botones();
             this.flag = true;
           }
         }
@@ -115,21 +116,19 @@ cerrar_ruta(){
   if(this.flag){
     this.flag = false;
     this.equipoProvider.guardar_storage();
+    loading.dismiss();
     this.viewCtrl.dismiss();
     //this.navCtrl.pop();
   }else{
-
+    loading.dismiss();
     this.alertCtrl.create({
-      title: "Confirmación",
-      subTitle: "¿Esta seguro de cerrar esta ruta?",
-      buttons: [{
-        text: 'No',
-        handler: data =>{}
-      },
+      title: "Error!",
+      subTitle: "No puede cerrar ruta, ya que no ha inspeccionado puntos.",
+      buttons: [
       {
-        text: 'Si',
+        text: 'OK',
         handler: data => {
-                          for(var idxRuta in this.equipoProvider.rutasCargadas){
+                          /*for(var idxRuta in this.equipoProvider.rutasCargadas){
                             if(this.equipoProvider.rutasCargadas[idxRuta].idRuta == this.rutaProvider.idRuta){
                               this.equipoProvider.rutasCargadas[idxRuta].fechaCierre = this.fecha;
                               this.equipoProvider.rutasCargadas[idxRuta].cerrado = true;
@@ -137,16 +136,17 @@ cerrar_ruta(){
                               console.log("idRutaEjecucion: "+this.equipoProvider.rutasCargadas[idxRuta].idRutaEjecucion);
                             }
                          }
+                         this.rutaProvider.botones();
                          this.equipoProvider.guardar_storage();
 
                          this.viewCtrl.dismiss();
-
+                        */
                        }
       }]
     }).present();
   }
 
-  loading.dismiss();
+
 
 }
 

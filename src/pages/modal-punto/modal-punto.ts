@@ -27,6 +27,7 @@ export class ModalPuntoPage {
               public camera: Camera,
               private viewCtrl: ViewController) {
 
+                this.date;
                 this.mostrar_datos_punto_guardado();
   }
 
@@ -71,6 +72,10 @@ export class ModalPuntoPage {
           let valorFloat:number = parseFloat(this.valorMedida.replace(',','.'));
           let valorMinimoFloat:number = parseFloat(this.rutaProvider.puntoInspeccion.valorMinimo.replace(',','.'));
           let valorMaximoFloat:number = parseFloat(this.rutaProvider.puntoInspeccion.valorMaximo.replace(',','.'));
+          console.log("valorFloat: "+valorFloat);
+          console.log("valorMinimoFloat: "+valorMinimoFloat);
+          console.log("valorMaximoFloat: "+valorMaximoFloat);
+          console.log("CONDICION: "+valorMinimoFloat +"<=+" +valorFloat +"&&"+ valorFloat+"<="+ valorMaximoFloat);
           if(valorMinimoFloat <= valorFloat && valorFloat <= valorMaximoFloat){
             this.guardar_punto();
           }else{
@@ -85,6 +90,7 @@ export class ModalPuntoPage {
                 {
                   text: 'Guardar',
                   handler: data => {
+
                                       this.rutaProvider.notifica(true);
                                       this.guardar_punto();
                                     }

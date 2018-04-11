@@ -7,6 +7,8 @@ import { UsuarioProvider } from "../../providers/usuario/usuario";
 
 import { EquipoProvider } from "../../providers/equipo/equipo";
 
+import { RutaProvider } from "../../providers/ruta/ruta";
+
 import { RutaTO } from "../../models/rutaTO.model";
 
 import { UsuarioTO } from "../../models/UsuarioTO.model";
@@ -33,21 +35,26 @@ export class LoginPage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
               public usuarioProvider: UsuarioProvider,
+              public rutaProvider: RutaProvider,
               public dominioProvider: DominioProvider,
               public equipoProvider: EquipoProvider,
               private modalCtrl: ModalController,
               private network: Network) {
 
-        console.log("INICIO STORAGE length: "+equipoProvider.rutasCargadas.length);
-        if(equipoProvider.rutasCargadas.length > 0){
+        this.date;
+        //equipoProvider.rutasCargadas = [];
+        //equipoProvider.guardar_storage();
+        equipoProvider.cargar_storage();
+        console.log("INICIO STORAGE length");
+      /*  if(equipoProvider.rutasCargadas.length > 0){
           console.log("ENTRO IF");
           this.elimarEquipoSincronizado();
-        }
-        console.log("SALIO IF");
+        }*/
 
         //console.log("INICIO STORAGE length: "+equipoProvider.rutasCargadas.length);
         dominioProvider.carga_dominio()
         .then(data => {
+          console.log("DATA DOMINIO");
    		     //console.log(data);
     	    })
  	        .catch(error => {
@@ -62,43 +69,6 @@ export class LoginPage {
           console.log("FIN DOMINIO");
   }
 
-
-
-  elimarEquipoSincronizado(){
-    console.log("INICION ELIMINA DOMINIO");
-    let idxRutaEliminar = [];
-    let eliminarStorage:boolean = true;
-    for(var idxRutaSincronizada in this.equipoProvider.rutasCargadas){
-      console.log("SINCRONIZADO?: "+this.equipoProvider.rutasCargadas[idxRutaSincronizada].sincronizado);
-      if(this.equipoProvider.rutasCargadas[idxRutaSincronizada].sincronizado){
-        console.log("BORRO RUTA SINCRONIZADA: "+this.equipoProvider.rutasCargadas.length);
-        idxRutaEliminar.push(idxRutaSincronizada);
-
-      }
-    }
-    for(let idxEliminar of idxRutaEliminar){
-      delete this.equipoProvider.rutasCargadas[idxEliminar];
-      console.log("TERMINO FOR");
-    }
-
-
-    console.log("SALIO FOR");
-    this.equipoProvider.rutasCargadas = this.equipoProvider.rutasCargadas.filter(Boolean);
-    console.log("SALIO FILTER");
-
-    for(var idxRutaCargadas in this.equipoProvider.rutasCargadas){
-      if(this.equipoProvider.rutasCargadas[idxRutaCargadas].idRutaEjecucion != null){
-        eliminarStorage = false;
-      }
-    }
-    if(eliminarStorage){
-      this.equipoProvider.rutasCargadas = [];
-    }
-
-    this.equipoProvider.guardar_storage();
-    console.log("FIN FOR");
-  }
-
   ingresar(){
     this.loading = this.loadingCtrl.create({
       content: "Cargando Rutas..."
@@ -111,9 +81,9 @@ export class LoginPage {
 
     console.log("ID DOMINIO: "+this.dominio);
 
-if(this.network.type != 'none'){
-    this.usuarioProvider.ingresar( username, password, this.dominio ).then(
-      (res) => {
+    if(this.network.type != 'none'){
+        this.usuarioProvider.ingresar( username, password, this.dominio ).then(
+          (res) => {
                   //loading.dismiss();
                   console.log('success '+ JSON.stringify(res));
                   this.usuario = res;
@@ -131,7 +101,10 @@ if(this.network.type != 'none'){
                   )
                   this.equipoProvider.usuario[0] = usuarioTO;
 
-              console.log('USUARIO TO: '+ JSON.stringify(this.equipoProvider.usuario));
+                  //this.equipoProvider.idUsuario = usuarioTO.idUsuario;
+                  //console.log('ID USUARIO: '+ JSON.stringify(this.equipoProvider.idUsuario));
+                  //this.equipoProvider.guardar_storage();
+                  console.log('USUARIO TO: '+ JSON.stringify(this.equipoProvider.usuario));
 
                   if( this.equipoProvider.usuario[0].credencialesValidas == "1" ){
                     if(this.equipoProvider.usuario[0].tieneAcceso == "1"){
@@ -180,18 +153,18 @@ if(this.network.type != 'none'){
                 })
                 alert.present();
                 }
-    )
-  }else{
-    // dispositivo sin internet
-    console.log("stuff if disconnected");
-    this.loading.dismiss();
-    this.alertCtrl.create({
-      title: "Error!",
-      subTitle: "Revise su conexión a internet, y reintente nuevamente.",
-      buttons: ["Ok"]
-    }).present();
-  }
-  }
+        )
+      }else{
+        // dispositivo sin internet
+        console.log("stuff if disconnected");
+        this.loading.dismiss();
+        this.alertCtrl.create({
+          title: "Error!",
+          subTitle: "Revise su conexión a internet, y reintente nuevamente.",
+          buttons: ["Ok"]
+        }).present();
+      }
+    }
 
   cargar_pendientes(){
     //let errorListaRuta:boolean = false;
@@ -220,6 +193,7 @@ if(this.network.type != 'none'){
                         {
                           text: 'OK',
                           handler: data =>{
+                            this.rutaProvider.botones();
                             let listaModal = this.modalCtrl.create( "ModalIniciaRutaPage" );
                             listaModal.present();
                           }
@@ -263,6 +237,7 @@ if(this.network.type != 'none'){
                       null,
                       this.dataRuta.listaRuta[idxRuta].nombre,
                       this.equipoProvider.usuario[0].idUsuario,
+                      null,
                       false,
                       false,
                       false,

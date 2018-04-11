@@ -23,11 +23,14 @@ export class UsuarioProvider {
   constructor(public http: Http) {}
 
   activo():boolean{
-    if( this.token ){
+    if( this.usuario.idUsuario ){
+      console.log("TRUE: "+this.usuario.idUsuario);
       return true;
     }else{
+      console.log("FALSE: "+this.usuario.idUsuario);
       return false;
     }
+
   }
 
   ingresar( username:string, password:string, dominio:string ){
@@ -55,7 +58,7 @@ export class UsuarioProvider {
                         return Observable.throw(err);
                       })
                       // The (err) => {} param on subscribe can't catch server down error so I keep only the catch
-                      .subscribe(data => { resolve(data) })
+                      .subscribe(data => { resolve(data)  })
                   })
 
      }
@@ -106,6 +109,10 @@ export class UsuarioProvider {
     console.log("USUARIO!!!"+usuario.codigoUsuario);
     this.usuario = usuario;
   }
+
+
+
+
 
 
 
